@@ -137,13 +137,23 @@ def format_time_ago(dt):
         return dt.strftime("%Y-%m-%d %H:%M")
 
 
-def display_sessions(sessions, selected_idx=None):
-    """Display sessions in a nice formatted list with optional highlighting."""
+def display_sessions(sessions, selected_idx=None, scroll_offset=0, visible_count=10):
+    """Display sessions in a scrollable window with optional highlighting."""
     print(f"\n{Colors.BOLD}{Colors.CYAN}╔{'═' * 78}╗{Colors.RESET}")
     print(f"{Colors.BOLD}{Colors.CYAN}║{Colors.RESET} {Colors.BOLD}Claude Code Sessions (Last 24 Hours){Colors.RESET}{' ' * 39}{Colors.BOLD}{Colors.CYAN}║{Colors.RESET}")
     print(f"{Colors.BOLD}{Colors.CYAN}╚{'═' * 78}╝{Colors.RESET}\n")
 
-    for i, session in enumerate(sessions):
+    total_sessions = len(sessions)
+    end_offset = min(scroll_offset + visible_count, total_sessions)
+
+    # Show scroll indicator at top if not at the beginning
+    if scroll_offset > 0:
+        print(f"{Colors.BRIGHT_BLACK}     ↑ {scroll_offset} more above ↑{Colors.RESET}")
+        print()
+
+    for i in range(scroll_offset, end_offset):
+        session = sessions[i]
+
         # Extract project name from path (make it more readable)
         project = session['project']
 
@@ -181,7 +191,16 @@ def display_sessions(sessions, selected_idx=None):
         print(f"     {metadata}")
         print()
 
+    # Show scroll indicator at bottom if more items below
+    if end_offset < total_sessions:
+        print(f"{Colors.BRIGHT_BLACK}     ↓ {total_sessions - end_offset} more below ↓{Colors.RESET}")
+        print()
+
     print(f"{Colors.BRIGHT_BLACK}{'─' * 80}{Colors.RESET}")
+
+    # Show position indicator
+    if total_sessions > visible_count:
+        print(f"{Colors.BRIGHT_BLACK}Showing {scroll_offset + 1}-{end_offset} of {total_sessions}{Colors.RESET}")
 
 
 def get_arrow_key():
@@ -223,11 +242,19 @@ def main():
 
     # Interactive selection with arrow keys
     selected_idx = 0
+    visible_count = 10  # Number of sessions visible at once
+    scroll_offset = 0
 
     while True:
+        # Calculate scroll offset to keep selected item visible
+        if selected_idx < scroll_offset:
+            scroll_offset = selected_idx
+        elif selected_idx >= scroll_offset + visible_count:
+            scroll_offset = selected_idx - visible_count + 1
+
         # Clear screen and display sessions
         os.system('clear' if os.name != 'nt' else 'cls')
-        display_sessions(sessions, selected_idx)
+        display_sessions(sessions, selected_idx, scroll_offset, visible_count)
 
         print(f"\n{Colors.BRIGHT_BLACK}Use ↑/↓ arrows to navigate, Enter to select, q to quit{Colors.RESET}")
 
