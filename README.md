@@ -14,8 +14,32 @@ Extract and analyze bash commands from Claude Code session history.
 pipx run ccbashhistory
 ```
 
-Shows an interactive list of your recent Claude Code sessions. Use arrow keys to navigate and press Enter to select a session to analyze.
-Prints all the bash commands run by claude code during this session
+Run with no arguments to open the interactive session picker. It lists your recent Claude Code sessions (those active within the last 24 hours by default). Navigate with the arrow keys (or press the number shown next to a session for direct selection) and press Enter to view that session. Press `q` to quit. Selecting a session prints all of the bash commands Claude Code ran during it.
+
+### Options
+
+| Flag | Description |
+| --- | --- |
+| _(no flags)_ | Open the interactive arrow-key session picker for the lookback window. |
+| `--hours N` | Set the lookback window, in hours, used to find recent sessions. Default: `24`. Increase it to widen the window or decrease it to narrow it. |
+| `--export [PATH]` | Non-interactive mode. Export today's bash commands to a file instead of opening the picker. `PATH` is optional; when omitted the file is named `cc_bash_commands_YYYY-MM-DD.txt` in the current directory. |
+| `-h`, `--help` | Show the help message and exit. |
+| `--version` | Print the installed version and exit. |
+
+Examples:
+
+```bash
+# Interactive picker over the last 48 hours
+ccbashhistory --hours 48
+
+# Export today's commands to the default file (cc_bash_commands_YYYY-MM-DD.txt)
+ccbashhistory --export
+
+# Export today's commands to a specific path
+ccbashhistory --export ~/bash-history.txt
+```
+
+The interactive picker works across macOS, Linux, and Windows: it uses native key reading on each platform (`msvcrt` on Windows, termios/tty on macOS and Linux) so arrow keys, number selection, and `q` to quit behave the same everywhere. The `--export` mode is fully non-interactive and works identically on all three operating systems.
 
 ## Requirements
 

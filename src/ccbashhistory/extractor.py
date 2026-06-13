@@ -9,6 +9,8 @@ def extract_bash_commands(jsonl_file):
         for line_num, line in enumerate(f, 1):
             try:
                 data = json.loads(line)
+                if not isinstance(data, dict):
+                    continue
 
                 # Check if this is an assistant message with tool calls
                 if data.get('type') == 'assistant' and 'message' in data:
@@ -26,7 +28,8 @@ def extract_bash_commands(jsonl_file):
                                             'timestamp': data.get('timestamp', 'N/A')
                                         })
             except json.JSONDecodeError:
-                print(f"Warning: Could not parse line {line_num}", file=sys.stderr)
+                # Skip malformed JSON lines silently to stay consistent
+                # with the rest of the tool (no noisy stderr output).
                 continue
 
     return commands

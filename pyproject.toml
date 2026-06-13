@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ccbashhistory"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Extract and analyze bash commands from Claude Code session history"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -34,5 +34,11 @@ Issues = "https://github.com/pdenya/ccbashhistory/issues"
 [project.scripts]
 ccbashhistory = "ccbashhistory.cli:main"
 
+[tool.setuptools.dynamic]
+version = {attr = "ccbashhistory.__version__"}
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
