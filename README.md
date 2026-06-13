@@ -1,5 +1,8 @@
 # ccbashhistory
 
+[![PyPI version](https://img.shields.io/pypi/v/ccbashhistory.svg)](https://pypi.org/project/ccbashhistory/)
+[![Downloads/month](https://img.shields.io/pypi/dm/ccbashhistory.svg)](https://pypistats.org/packages/ccbashhistory)
+[![Total downloads](https://static.pepy.tech/badge/ccbashhistory)](https://pepy.tech/project/ccbashhistory)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
